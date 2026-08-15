@@ -27,6 +27,7 @@
 
   <!-- Main CSS File -->
   <link href="{% static 'css/main.css' %}" rel="stylesheet">
+  <link href="{% static 'css/products.css' %}" rel="stylesheet">
 
   <!-- =======================================================
   * Template Name: Yummy
@@ -52,7 +53,7 @@
       <nav id="navmenu" class="navmenu">
         <ul>
           <li><a href="#hero" class="active">Home<br></a></li>
-          <li><a href="#menu">Menu</a></li>
+          <li><a href="#products">Menu</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#gallery">Gallery</a></li>
           <li><a href="#footer">Contact Us</a></li>
@@ -115,7 +116,7 @@
 <!-- /Hero Section -->
 
 
-<section class="paint-section">
+{% comment %} <section class="paint-section">
 
   <!-- Horizontal Stroke -->
   <img src="{% static 'img/stroke-horizontal.png' %}"
@@ -129,12 +130,12 @@
   <img src="{% static 'img/brush.png' %}"
        class="brush">
 
-</section>
+</section> {% endcomment %}
 
 
 
 <!-- Menu Section -->
-<section id="menu" class="menu section">
+{% comment %} <section id="menu" class="menu section">
 
   <!-- Section Title -->
   <div class="container section-title" data-aos="fade-up">
@@ -589,7 +590,11 @@
     </div>
 
   </div>
+</section> {% endcomment %}
+<section id="products" class="products section">
+    {% include "products.html" %}
 </section>
+
 <!-- /Menu Section -->
 
 
@@ -905,6 +910,6 @@
 
 <!-- Main JS File -->
 <script src="{% static 'js/main.js' %}"></script>
-
+<script src="{% static 'js/products.js' %}"></script>
 </body>
 </html>
