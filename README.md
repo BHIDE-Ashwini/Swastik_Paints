@@ -33,5 +33,3 @@ Start the development server:
 ```powershell
 python manage.py runserver
 ```
-
-````
