@@ -33,6 +33,11 @@ class Invoice(models.Model):
         on_delete=models.PROTECT,
         related_name="invoices",
     )
+    delivery_challans = models.ManyToManyField(
+        "DeliveryChallan",
+        blank=True,
+        related_name="invoices",
+    )
     created_by = models.ForeignKey(
         Admin,
         on_delete=models.PROTECT,
@@ -43,15 +48,6 @@ class Invoice(models.Model):
     )
 
     # Invoice document details
-    delivery_challan_number = models.CharField(
-        max_length=50,
-        blank=True,
-        null=True,
-    )
-    delivery_challan_date = models.DateField(
-        blank=True,
-        null=True,
-    )
     po_number = models.CharField(
         max_length=50,
         blank=True,
@@ -346,3 +342,179 @@ class InvoiceItem(models.Model):
 
     def __str__(self):
         return f"{self.invoice.invoice_number} - {self.description or self.paint.name}"
+
+class DeliveryChallan(models.Model):
+    challan_number = models.CharField(
+        max_length=50,
+        unique=True,
+    )
+    challan_date = models.DateField(
+        default=timezone.localdate,
+    )
+
+    client = models.ForeignKey(
+        Client,
+        on_delete=models.PROTECT,
+        related_name="delivery_challans",
+    )
+    created_by = models.ForeignKey(
+        Admin,
+        on_delete=models.PROTECT,
+        related_name="created_delivery_challans",
+    )
+
+    # Order / reference details
+    po_number = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+    )
+    classification = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+    )
+
+    # Shipping snapshot
+    shipping_name = models.CharField(
+        max_length=150,
+        blank=True,
+        null=True,
+    )
+    shipping_address = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+    )
+    shipping_city = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+    )
+    shipping_state = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+    )
+    shipping_pin_code = models.CharField(
+        max_length=10,
+        blank=True,
+        null=True,
+    )
+    shipping_gst_number = models.CharField(
+        max_length=15,
+        blank=True,
+        null=True,
+    )
+
+    # Dispatch details
+    eway_bill_number = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+    )
+    removal_date = models.DateField(
+        blank=True,
+        null=True,
+    )
+    removal_time = models.TimeField(
+        blank=True,
+        null=True,
+    )
+    dispatched_through = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+    )
+    vehicle_number = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True,
+    )
+    lr_number = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+    )
+    lr_date = models.DateField(
+        blank=True,
+        null=True,
+    )
+
+    notes = models.TextField(
+        blank=True,
+        null=True,
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+    )
+
+    class Meta:
+        db_table = "invoices_delivery_challan"
+        indexes = [
+            models.Index(fields=["challan_date"]),
+            models.Index(fields=["client", "challan_date"]),
+        ]
+
+    def __str__(self):
+        return self.challan_number
+
+
+class DeliveryChallanItem(models.Model):
+    delivery_challan = models.ForeignKey(
+        DeliveryChallan,
+        on_delete=models.CASCADE,
+        related_name="items",
+    )
+    paint = models.ForeignKey(
+        Paint,
+        on_delete=models.PROTECT,
+        related_name="delivery_challan_items",
+    )
+
+    # Challan snapshot fields
+    description = models.CharField(
+        max_length=150,
+        blank=True,
+        null=True,
+    )
+    hsn_sac_code = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True,
+    )
+    batch_number = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+    )
+    pack_description = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+    )
+
+    quantity = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)],
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    class Meta:
+        db_table = "invoices_delivery_challan_item"
+        indexes = [
+            models.Index(fields=["delivery_challan"]),
+            models.Index(fields=["paint"]),
+        ]
+
+    def __str__(self):
+        return (
+            f"{self.delivery_challan.challan_number} - "
+            f"{self.description or self.paint.name}"
+        )
