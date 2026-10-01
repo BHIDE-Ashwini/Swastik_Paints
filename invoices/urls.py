@@ -3,7 +3,10 @@ from django.urls import path
 from .views import (
     DeliveryChallanDetailView,
     DeliveryChallanListCreateView,
+    InvoiceDetailView,
+    InvoiceListCreateView,
 )
+
 
 urlpatterns = [
     path(
@@ -16,4 +19,14 @@ urlpatterns = [
         DeliveryChallanDetailView.as_view(),
         name="delivery-challan-detail",
     ),
-] 
+    path(
+        "",
+        InvoiceListCreateView.as_view(),
+        name="invoice-list",
+    ),
+    path(
+        "<int:pk>/",
+        InvoiceDetailView.as_view(),
+        name="invoice-detail",
+    ),
+]
