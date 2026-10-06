@@ -740,8 +740,6 @@
         </div>
 
     </section><!-- /About Section -->
-
-
     {% comment %} <!-- Why Us Section -->
     <section id="why-us" class="why-us section light-background">
         <div class="container">
@@ -951,118 +949,248 @@
     </section><!-- /Gallery Section -->
     </main>
 
-
-    <!-- Contact Us Title -->
-    <!-- Footer -->
-    <footer id="footer" class="footer dark-background">
-
-        <!-- Contact Us Title -->
-        <div class="container section-title text-center" data-aos="fade-up">
-
-            <h2 style="color: white;">Contact Us</h2>
-
-            <p>
-                <span style="color: #adb5bd;">Get in</span>
-                <span class="description-title">Touch</span>
-            </p>
-
-        </div>
+    <!-- ============================================================
+         New Contact Support Section
+    ============================================================ -->
+    <section id="support-contact" class="support-contact section">
 
         <div class="container">
-            <div class="row gy-3">
 
-                <!-- Address -->
-                <div class="col-lg-3 col-md-6 d-flex">
-                    <i class="bi bi-geo-alt icon"></i>
+            <div class="support-contact-layout">
 
-                    <div class="address">
-                        <h4>Address</h4>
-                        <p>B/13, Nivdung Vistar, Rutunagari, Benkar Vasti,</p>
-                        <p>Dhayari, Pune 411041</p>
+                <!-- ==================================================
+                     LEFT: Contact Information
+                =================================================== -->
+                <div class="support-contact-info">
+
+                    <div class="support-contact-badge">
+                        <i class="bi bi-envelope"></i>
+                        <span>Contact Us</span>
                     </div>
-                </div>
 
-                <!-- Contact -->
-                <div class="col-lg-3 col-md-6 d-flex">
-                    <i class="bi bi-telephone icon"></i>
+                    <h2 class="support-contact-title">
+                        How can we help you today?
+                    </h2>
 
-                    <div>
-                        <h4>Contact</h4>
+                    <p class="support-contact-description">
+                        Our dedicated customer support team is just a
+                        message or call away.
+                    </p>
 
-                        <p>
-                            <strong>Phone:</strong>
-                            <span>7776083076</span>
-                            <br>
 
-                            <strong>Email:</strong>
-                            <span>swastikkenterprises12@gmail.com</span>
-                        </p>
+                    <!-- Contact Details -->
+                    <div class="support-contact-details">
+
+                        <!-- Email -->
+                        <div class="support-contact-detail">
+
+                            <div class="support-contact-icon">
+                                <i class="bi bi-envelope-fill"></i>
+                            </div>
+
+                            <div class="support-contact-detail-content">
+                                <span>Email:</span>
+
+                                <a href="mailto:swastikkenterprises12@gmail.com">
+                                    swastikkenterprises12@gmail.com
+                                </a>
+                            </div>
+
+                        </div>
+
+
+                        <!-- Phone -->
+                        <div class="support-contact-detail">
+
+                            <div class="support-contact-icon">
+                                <i class="bi bi-telephone-fill"></i>
+                            </div>
+
+                            <div class="support-contact-detail-content">
+                                <span>Phone:</span>
+
+                                <a href="tel:7776083076">
+                                    7776083076
+                                </a>
+                            </div>
+
+                        </div>
+
+
+                        <!-- Location -->
+                        <div class="support-contact-detail">
+
+                            <div class="support-contact-icon">
+                                <i class="bi bi-geo-alt-fill"></i>
+                            </div>
+
+                            <div class="support-contact-detail-content">
+                                <span>Location:</span>
+
+                                <strong>
+                                    B/13, Nivdung Vistar, Rutunagari, Benkar Vasti, Dhayari, Pune 411041
+                                </strong>
+                            </div>
+
+                        </div>
+
                     </div>
-                </div>
 
-                <!-- Opening Hours -->
-                <div class="col-lg-3 col-md-6 d-flex">
-                    <i class="bi bi-clock icon"></i>
 
-                    <div>
-                        <h4>Opening Hours</h4>
+                    <!-- Opening Hours -->
+                    <div class="support-contact-hours">
+
+                        <h3>Opening Hours</h3>
 
                         <p>
                             <strong>Mon-Sun:</strong>
                             <span>10AM - 08PM</span>
-                            <br>
+                        </p>
 
+                        <p>
                             <strong>Thursday:</strong>
                             <span>Closed</span>
                         </p>
+
                     </div>
+
                 </div>
 
-                <!-- Social Links -->
-                <div class="col-lg-3 col-md-6">
-                    <h4>Follow Us</h4>
 
-                    <div class="social-links d-flex">
-                        <a href="#" class="twitter">
-                            <i class="bi bi-twitter-x"></i>
-                        </a>
+                <!-- ==================================================
+                     DIVIDER
+                =================================================== -->
+                <div class="support-contact-divider" aria-hidden="true"></div>
 
-                        <a href="#" class="facebook">
-                            <i class="bi bi-facebook"></i>
-                        </a>
 
-                        <a href="#" class="instagram">
-                            <i class="bi bi-instagram"></i>
-                        </a>
+                <!-- ==================================================
+                     RIGHT: Contact Form
+                =================================================== -->
+                <div class="support-contact-form-area">
 
-                        <a href="#" class="linkedin">
-                            <i class="bi bi-linkedin"></i>
-                        </a>
+                    <div class="support-contact-form-wrapper">
+
+                        <form class="support-contact-form">
+
+                            <!-- Name -->
+                            <div class="support-contact-form-row">
+
+                                <div class="support-contact-field">
+                                    <label for="support-first-name">
+                                        First name*
+                                    </label>
+
+                                    <input type="text"
+                                           id="support-first-name"
+                                           name="first_name"
+                                           placeholder="First name"
+                                           autocomplete="given-name"
+                                           required>
+                                </div>
+
+
+                                <div class="support-contact-field">
+                                    <label for="support-last-name">
+                                        Last name*
+                                    </label>
+
+                                    <input type="text"
+                                           id="support-last-name"
+                                           name="last_name"
+                                           placeholder="Last name"
+                                           autocomplete="family-name"
+                                           required>
+                                </div>
+
+                            </div>
+
+
+                            <!-- Work Email -->
+                            <div class="support-contact-field">
+
+                                <label for="support-email">
+                                    Work email*
+                                </label>
+
+                                <input type="email"
+                                       id="support-email"
+                                       name="email"
+                                       placeholder="Enter email"
+                                       autocomplete="email"
+                                       required>
+
+                            </div>
+
+
+                            <!-- Phone -->
+                            <div class="support-contact-field">
+
+                                <label for="support-phone">
+                                    Phone number*
+                                </label>
+
+                                <div class="support-contact-phone">
+
+                                    <select name="country_code"
+                                            aria-label="Country code">
+                                        <option value="+91" selected>
+                                            🇮🇳 +91
+                                        </option>
+                                    </select>
+
+                                    <input type="tel"
+                                           id="support-phone"
+                                           name="phone"
+                                           placeholder="Enter phone number"
+                                           autocomplete="tel"
+                                           required>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Message -->
+                            <div class="support-contact-field">
+
+                                <label for="support-message">
+                                    Message*
+                                </label>
+
+                                <textarea id="support-message"
+                                          name="message"
+                                          placeholder="Enter a question, feedback, or suggestions..."
+                                          rows="4"
+                                          required></textarea>
+
+                            </div>
+
+
+                            <!-- Submit -->
+                            <div class="support-contact-submit-row">
+
+                                <button type="button"
+                                        class="support-contact-submit">
+                                    Submit
+                                </button>
+
+                            </div>
+
+                        </form>
+
                     </div>
+
                 </div>
 
             </div>
-        </div>
-
-        <!-- Copyright -->
-        <div class="container copyright text-center mt-4">
-
-            <p>
-                © <span>Copyright</span>
-                <strong class="px-1 sitename">Swastikk Enterprises</strong>
-                <span>All Rights Reserved</span>
-            </p>
-
-            <div class="credits">
-                Designed by
-                <a href="https://bootstrapmade.com/">
-                    BootstrapMade
-                </a>
-            </div>
 
         </div>
 
-    </footer>
+    </section>
+    <!-- /New Contact Support Section -->
+
+
+
 
     <!-- Scroll Top -->
     <a href="#"

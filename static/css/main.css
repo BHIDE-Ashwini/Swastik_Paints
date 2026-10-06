@@ -1725,122 +1725,456 @@ section,
             }
 }
 
+
+
 /*--------------------------------------------------------------
-# Contact Section
+# New Contact Support Section
 --------------------------------------------------------------*/
-.contact .info-item {
-  background-color: var(--surface-color);
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-  padding: 20px 30px;
+
+#support-contact {
+    padding: 80px 0;
+    background: #ffffff;
 }
 
-.contact .info-item .icon {
-  color: var(--contrast-color);
-  background-color: var(--accent-color);
-  width: 56px;
-  height: 56px;
-  font-size: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.3s ease-in-out;
-  border-radius: 50%;
-  margin-right: 15px;
+    #support-contact > .container {
+        max-width: 1180px;
+    }
+
+
+    /*--------------------------------------------------------------
+# Main Two-Column Layout
+--------------------------------------------------------------*/
+
+    #support-contact .support-contact-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+        column-gap: 64px;
+        align-items: center;
+    }
+
+
+    /*--------------------------------------------------------------
+# Left Contact Information
+--------------------------------------------------------------*/
+
+    #support-contact .support-contact-info {
+        min-width: 0;
+    }
+
+
+    #support-contact .support-contact-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 9px;
+        margin-bottom: 20px;
+        color: #212529;
+        background: #ffffff;
+        border: 1px solid #dfe2e6;
+        border-radius: 4px;
+        font-size: 13px;
+        font-weight: 500;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+
+        #support-contact .support-contact-badge i {
+            color: #CE1212;
+            font-size: 12px;
+        }
+
+
+    #support-contact .support-contact-title {
+        max-width: 500px;
+        margin: 0 0 20px;
+        color: #111827;
+        font-family: var(--default-font);
+        font-size: 42px;
+        font-weight: 700;
+        line-height: 1.12;
+        letter-spacing: -1px;
+    }
+
+
+    #support-contact .support-contact-description {
+        max-width: 430px;
+        margin: 0 0 30px;
+        color: #667085;
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+
+    /*--------------------------------------------------------------
+# Contact Details
+--------------------------------------------------------------*/
+
+    #support-contact .support-contact-details {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+
+    #support-contact .support-contact-detail {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 40px;
+    }
+
+
+    #support-contact .support-contact-icon {
+        width: 38px;
+        height: 38px;
+        flex: 0 0 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #CE1212;
+        background: #f3f1ff;
+        border-radius: 8px;
+    }
+
+
+        #support-contact .support-contact-icon i {
+            font-size: 16px;
+        }
+
+
+    #support-contact .support-contact-detail-content {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        gap: 2px;
+    }
+
+
+        #support-contact .support-contact-detail-content span {
+            color: #667085;
+            font-size: 12px;
+            line-height: 1.3;
+        }
+
+
+        #support-contact .support-contact-detail-content a,
+        #support-contact .support-contact-detail-content strong {
+            color: #111827;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
+        }
+
+
+        #support-contact .support-contact-detail-content a {
+            transition: color 0.2s ease;
+        }
+
+
+            #support-contact .support-contact-detail-content a:hover {
+                color: #CE1212;
+            }
+
+
+    /*--------------------------------------------------------------
+# Opening Hours
+--------------------------------------------------------------*/
+
+    #support-contact .support-contact-hours {
+        margin-top: 30px;
+    }
+
+
+        #support-contact .support-contact-hours h3 {
+            margin: 0 0 10px;
+            color: #111827;
+            font-family: var(--default-font);
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+
+        #support-contact .support-contact-hours p {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            margin: 0 0 5px;
+            color: #667085;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+
+            #support-contact .support-contact-hours p strong {
+                color: #111827;
+                font-weight: 600;
+            }
+
+
+    /*--------------------------------------------------------------
+# Divider
+--------------------------------------------------------------*/
+
+    #support-contact .support-contact-divider {
+        width: 1px;
+        height: 82%;
+        justify-self: center;
+        background: #e5e7eb;
+    }
+
+
+    /*--------------------------------------------------------------
+# Right Form Area
+--------------------------------------------------------------*/
+
+    #support-contact .support-contact-form-area {
+        min-width: 0;
+    }
+
+
+    #support-contact .support-contact-form-wrapper {
+        width: 100%;
+        padding: 30px;
+        background: #f9fafb;
+        border: 1px solid #dfe3e8;
+        border-radius: 20px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+
+
+    #support-contact .support-contact-form {
+        width: 100%;
+    }
+
+
+    /*--------------------------------------------------------------
+# Form Rows
+--------------------------------------------------------------*/
+
+    #support-contact .support-contact-form-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+
+
+    #support-contact .support-contact-field {
+        width: 100%;
+        margin-bottom: 16px;
+    }
+
+
+    #support-contact .support-contact-form-row .support-contact-field {
+        margin-bottom: 0;
+    }
+
+
+    /*--------------------------------------------------------------
+# Form Labels
+--------------------------------------------------------------*/
+
+    #support-contact .support-contact-form label {
+        display: block;
+        margin-bottom: 7px;
+        color: #111827;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.3;
+    }
+
+
+    /*--------------------------------------------------------------
+# Inputs
+--------------------------------------------------------------*/
+
+    #support-contact .support-contact-form input,
+    #support-contact .support-contact-form select,
+    #support-contact .support-contact-form textarea {
+        width: 100%;
+        box-sizing: border-box;
+        color: #212529;
+        background: #ffffff;
+        border: 1px solid #dfe3e8;
+        border-radius: 7px;
+        box-shadow: none;
+        font-family: var(--default-font);
+        font-size: 13px;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+
+    #support-contact .support-contact-form input {
+        height: 42px;
+        padding: 10px 12px;
+    }
+
+
+        #support-contact .support-contact-form input::placeholder,
+        #support-contact .support-contact-form textarea::placeholder {
+            color: #98a2b3;
+        }
+
+
+        #support-contact .support-contact-form input:focus,
+        #support-contact .support-contact-form select:focus,
+        #support-contact .support-contact-form textarea:focus {
+            outline: none;
+            border-color: #CE1212;
+            box-shadow: 0 0 0 2px rgba(206, 18, 18, 0.08);
+        }
+
+
+    /*--------------------------------------------------------------
+# Phone Field
+--------------------------------------------------------------*/
+
+    #support-contact .support-contact-phone {
+        display: flex;
+        width: 100%;
+    }
+
+
+        #support-contact .support-contact-phone select {
+            width: 76px;
+            min-width: 76px;
+            height: 42px;
+            padding: 0 7px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-right: 0;
+            cursor: pointer;
+        }
+
+
+        #support-contact .support-contact-phone input {
+            flex: 1 1 auto;
+            min-width: 0;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+
+    /*--------------------------------------------------------------
+# Message
+--------------------------------------------------------------*/
+
+    #support-contact .support-contact-form textarea {
+        display: block;
+        min-height: 110px;
+        padding: 10px 12px;
+        resize: vertical;
+        line-height: 1.5;
+    }
+
+
+    /*--------------------------------------------------------------
+# Submit Button
+--------------------------------------------------------------*/
+
+    #support-contact .support-contact-submit-row {
+        margin-top: 2px;
+    }
+
+
+    #support-contact .support-contact-submit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 68px;
+        height: 36px;
+        padding: 7px 16px;
+        color: #ffffff;
+        background: #CE1212;
+        border: 0;
+        border-radius: 7px;
+        font-family: var(--default-font);
+        font-size: 13px;
+        font-weight: 500;
+        box-shadow: 0 3px 7px rgba(206, 18, 18, 0.22);
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+
+        #support-contact .support-contact-submit:hover {
+            background: #b01010;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 10px rgba(206, 18, 18, 0.25);
+        }
+
+        #support-contact .support-contact-submit:active {
+            transform: translateY(0);
+        }
+
+
+/*--------------------------------------------------------------
+# Responsive - Tablet
+--------------------------------------------------------------*/
+
+@media (max-width: 991px) {
+
+    #support-contact {
+        padding: 65px 0;
+    }
+
+        #support-contact .support-contact-layout {
+            grid-template-columns: 1fr;
+            row-gap: 40px;
+        }
+
+        #support-contact .support-contact-divider {
+            width: 100%;
+            height: 1px;
+            justify-self: stretch;
+            background: #e5e7eb;
+        }
+
+        #support-contact .support-contact-form-area {
+            width: 100%;
+        }
 }
 
-.contact .info-item h3 {
-  font-size: 20px;
-  font-weight: 700;
-  margin: 0 0 5px 0;
-  font-family: var(--default-font);
-  color: color-mix(in srgb, var(--default-color), transparent 30%);
-}
 
-.contact .info-item p {
-  padding: 0;
-  margin-bottom: 0;
-  font-size: 14px;
-}
-
-.contact .info-item .social-links a {
-  font-size: 24px;
-  display: inline-block;
-  line-height: 1;
-  margin: 4px 6px 0 0;
-  transition: 0.3s;
-  color: color-mix(in srgb, var(--default-color), transparent 50%);
-}
-
-.contact .info-item .social-links a:hover {
-  color: var(--accent-color);
-}
-
-.contact .php-email-form {
-  background-color: var(--surface-color);
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  margin-top: 30px;
-}
+/*--------------------------------------------------------------
+# Responsive - Mobile
+--------------------------------------------------------------*/
 
 @media (max-width: 575px) {
-  .contact .php-email-form {
-    padding: 20px;
-  }
+
+    #support-contact {
+        padding: 50px 0;
+    }
+
+        #support-contact .support-contact-title {
+            font-size: 32px;
+            letter-spacing: -0.5px;
+        }
+
+        #support-contact .support-contact-description {
+            font-size: 14px;
+        }
+
+        #support-contact .support-contact-form-wrapper {
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        #support-contact .support-contact-form-row {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+            #support-contact .support-contact-form-row .support-contact-field {
+                margin-bottom: 16px;
+            }
+
+        #support-contact .support-contact-phone select {
+            width: 72px;
+            min-width: 72px;
+        }
 }
-
-.contact .php-email-form input[type=text],
-.contact .php-email-form input[type=email],
-.contact .php-email-form textarea {
-  color: var(--default-color);
-  background-color: color-mix(in srgb, var(--surface-color), transparent 50%);
-  border-color: color-mix(in srgb, var(--default-color), transparent 80%);
-  font-size: 14px;
-  padding: 10px 15px;
-  box-shadow: none;
-  border-radius: 0;
-}
-
-.contact .php-email-form input[type=text]:focus,
-.contact .php-email-form input[type=email]:focus,
-.contact .php-email-form textarea:focus {
-  border-color: var(--accent-color);
-}
-
-.contact .php-email-form input[type=text]::placeholder,
-.contact .php-email-form input[type=email]::placeholder,
-.contact .php-email-form textarea::placeholder {
-  color: color-mix(in srgb, var(--default-color), transparent 70%);
-}
-
-.contact .php-email-form button[type=submit] {
-  color: var(--contrast-color);
-  background: var(--accent-color);
-  border: 0;
-  padding: 10px 30px;
-  transition: 0.4s;
-  border-radius: 50px;
-}
-
-.contact .php-email-form button[type=submit]:hover {
-  background: color-mix(in srgb, var(--accent-color), transparent 20%);
-}
-
-/*--------------------------------------------------------------
-# Starter Section Section
---------------------------------------------------------------*/
-
-
-/*--------------------------------------------------------------
-section contact us 
---------------------------------------------------------------*/
-#contact {
-  padding-bottom: 0;
-}
-
-#contact .section-title {
-  padding-bottom: 40px;
-}
-
 /*--------------------------------------------------------------
 paint animation 
 --------------------------------------------------------------*/
