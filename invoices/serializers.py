@@ -1,6 +1,14 @@
+from decimal import Decimal, ROUND_HALF_UP
+
+from django.db import transaction
 from rest_framework import serializers
 
-from .models import DeliveryChallan, DeliveryChallanItem
+from .models import (
+    DeliveryChallan,
+    DeliveryChallanItem,
+    Invoice,
+    InvoiceItem,
+)
 
 
 class DeliveryChallanItemSerializer(serializers.ModelSerializer):
@@ -36,6 +44,7 @@ class DeliveryChallanSerializer(serializers.ModelSerializer):
         source="client.name",
         read_only=True,
     )
+
     created_by = serializers.PrimaryKeyRelatedField(
         read_only=True,
     )
@@ -134,21 +143,6 @@ class DeliveryChallanSerializer(serializers.ModelSerializer):
         return instance
 
 
-from decimal import Decimal, ROUND_HALF_UP
-
-from django.db import transaction
-from rest_framework import serializers
-
-from clients.models import Client
-from products.models import Paint
-
-from .models import (
-    DeliveryChallan,
-    Invoice,
-    InvoiceItem,
-)
-
-
 class InvoiceItemSerializer(serializers.ModelSerializer):
     paint_name = serializers.CharField(
         source="paint.name",
@@ -185,6 +179,7 @@ class InvoiceItemSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "Unit price cannot be negative."
             )
+
         return value
 
 
@@ -195,6 +190,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
         source="client.name",
         read_only=True,
     )
+
     created_by = serializers.PrimaryKeyRelatedField(
         read_only=True,
     )
@@ -216,6 +212,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
             "created_by",
             "delivery_challans",
 
+            # Document details
             "po_number",
             "payment_terms",
             "classification",
@@ -263,7 +260,9 @@ class InvoiceSerializer(serializers.ModelSerializer):
             "notes",
             "pdf_file",
 
+            # Items
             "items",
+
             "created_at",
             "updated_at",
         ]
@@ -273,7 +272,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
             "client_name",
             "created_by",
 
-            # Server-calculated values
+            # Historical billing snapshot
             "billing_name",
             "billing_phone",
             "billing_email",
@@ -283,6 +282,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
             "billing_pin_code",
             "billing_gst_number",
 
+            # Server-calculated values
             "subtotal",
             "discount_amount",
             "taxable_amount",
@@ -298,8 +298,35 @@ class InvoiceSerializer(serializers.ModelSerializer):
         ]
 
     def validate(self, attrs):
-        client = attrs["client"]
-        delivery_challans = attrs.get("delivery_challans", [])
+        client = attrs.get("client")
+
+        if self.instance:
+            client = client or self.instance.client
+
+            if (
+                "client" in attrs
+                and client != self.instance.client
+            ):
+                raise serializers.ValidationError(
+                    {
+                        "client": (
+                            "The client cannot be changed after "
+                            "the invoice has been created."
+                        )
+                    }
+                )
+
+        if client is None:
+            raise serializers.ValidationError(
+                {"client": "Client is required."}
+            )
+
+        delivery_challans = attrs.get("delivery_challans")
+
+        if delivery_challans is None and self.instance:
+            delivery_challans = list(
+                self.instance.delivery_challans.all()
+            )
 
         if delivery_challans:
             challan_client_ids = {
@@ -317,18 +344,27 @@ class InvoiceSerializer(serializers.ModelSerializer):
                     }
                 )
 
-            already_invoiced = [
-                challan.challan_number
-                for challan in delivery_challans
-                if challan.invoices.exists()
-            ]
+            already_invoiced = []
+
+            for challan in delivery_challans:
+                if self.instance:
+                    already_linked = challan.invoices.exclude(
+                        pk=self.instance.pk
+                    ).exists()
+                else:
+                    already_linked = challan.invoices.exists()
+
+                if already_linked:
+                    already_invoiced.append(
+                        challan.challan_number
+                    )
 
             if already_invoiced:
                 raise serializers.ValidationError(
                     {
                         "delivery_challans": (
                             "These delivery challans are already "
-                            f"linked to an invoice: "
+                            "linked to another invoice: "
                             f"{', '.join(already_invoiced)}."
                         )
                     }
@@ -339,7 +375,12 @@ class InvoiceSerializer(serializers.ModelSerializer):
     def _calculate_item(self, item):
         quantity = Decimal(item["quantity"])
         unit_price = item["unit_price"]
-        line_discount = item.get("line_discount", Decimal("0.00"))
+
+        line_discount = item.get(
+            "line_discount",
+            Decimal("0.00"),
+        )
+
         gst_percentage = item["gst_percentage"]
 
         gross_amount = quantity * unit_price
@@ -351,7 +392,9 @@ class InvoiceSerializer(serializers.ModelSerializer):
             )
 
         gst_amount = (
-            taxable_amount * gst_percentage / Decimal("100")
+            taxable_amount
+            * gst_percentage
+            / Decimal("100")
         )
 
         return (
@@ -360,7 +403,12 @@ class InvoiceSerializer(serializers.ModelSerializer):
             gst_amount.quantize(Decimal("0.01")),
         )
 
-    def _calculate_totals(self, items, gst_type, additional_charges):
+    def _calculate_totals(
+        self,
+        items,
+        gst_type,
+        additional_charges,
+    ):
         subtotal = Decimal("0.00")
         discount_amount = Decimal("0.00")
         taxable_amount = Decimal("0.00")
@@ -370,10 +418,12 @@ class InvoiceSerializer(serializers.ModelSerializer):
             gross, taxable, gst = self._calculate_item(item)
 
             subtotal += gross
+
             discount_amount += item.get(
                 "line_discount",
                 Decimal("0.00"),
             )
+
             taxable_amount += taxable
             gst_amount += gst
 
@@ -381,10 +431,12 @@ class InvoiceSerializer(serializers.ModelSerializer):
             cgst_amount = gst_amount / Decimal("2")
             sgst_amount = gst_amount - cgst_amount
             igst_amount = Decimal("0.00")
+
         elif gst_type == Invoice.GSTType.INTER_STATE:
             cgst_amount = Decimal("0.00")
             sgst_amount = Decimal("0.00")
             igst_amount = gst_amount
+
         else:
             raise serializers.ValidationError(
                 {"gst_type": "GST type is required."}
@@ -404,18 +456,30 @@ class InvoiceSerializer(serializers.ModelSerializer):
         round_off = rounded_total - total_before_rounding
 
         return {
-            "subtotal": subtotal.quantize(Decimal("0.01")),
+            "subtotal": subtotal.quantize(
+                Decimal("0.01")
+            ),
             "discount_amount": discount_amount.quantize(
                 Decimal("0.01")
             ),
             "taxable_amount": taxable_amount.quantize(
                 Decimal("0.01")
             ),
-            "cgst_amount": cgst_amount.quantize(Decimal("0.01")),
-            "sgst_amount": sgst_amount.quantize(Decimal("0.01")),
-            "igst_amount": igst_amount.quantize(Decimal("0.01")),
-            "gst_amount": gst_amount.quantize(Decimal("0.01")),
-            "round_off": round_off.quantize(Decimal("0.01")),
+            "cgst_amount": cgst_amount.quantize(
+                Decimal("0.01")
+            ),
+            "sgst_amount": sgst_amount.quantize(
+                Decimal("0.01")
+            ),
+            "igst_amount": igst_amount.quantize(
+                Decimal("0.01")
+            ),
+            "gst_amount": gst_amount.quantize(
+                Decimal("0.01")
+            ),
+            "round_off": round_off.quantize(
+                Decimal("0.01")
+            ),
             "grand_total": rounded_total.quantize(
                 Decimal("0.01")
             ),
@@ -444,6 +508,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         items_data = validated_data.pop("items")
+
         delivery_challans = validated_data.pop(
             "delivery_challans",
             [],
@@ -455,21 +520,33 @@ class InvoiceSerializer(serializers.ModelSerializer):
             admin = request.user.admin_profile
         except AttributeError:
             raise serializers.ValidationError(
-                {"detail": "An active admin profile is required."}
+                {
+                    "detail": (
+                        "An active admin profile is required."
+                    )
+                }
             )
 
         if not admin.is_active:
             raise serializers.ValidationError(
-                {"detail": "An active admin profile is required."}
+                {
+                    "detail": (
+                        "An active admin profile is required."
+                    )
+                }
             )
 
         client = validated_data["client"]
 
+        # Create historical billing snapshot.
         validated_data.update(
             self._client_billing_snapshot(client)
         )
 
-        shipping_defaults = self._default_shipping_snapshot(client)
+        # Default shipping information from the client.
+        shipping_defaults = self._default_shipping_snapshot(
+            client
+        )
 
         for field, value in shipping_defaults.items():
             validated_data.setdefault(field, value)
@@ -481,15 +558,16 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
         gst_type = validated_data.get("gst_type")
 
-        # Snapshot product information and calculate line totals.
         prepared_items = []
 
         for item in items_data:
             paint = item["paint"]
 
             item["description"] = (
-                item.get("description") or paint.name
+                item.get("description")
+                or paint.name
             )
+
             item["hsn_sac_code"] = paint.hsn_sac_code
             item["gst_percentage"] = paint.gst_percentage
 
@@ -499,8 +577,10 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
             if gst_type == Invoice.GSTType.INTRA_STATE:
                 item_gst = gst_amount
+
             elif gst_type == Invoice.GSTType.INTER_STATE:
                 item_gst = gst_amount
+
             else:
                 raise serializers.ValidationError(
                     {"gst_type": "GST type is required."}
@@ -542,3 +622,112 @@ class InvoiceSerializer(serializers.ModelSerializer):
                 )
 
         return invoice
+
+    def update(self, instance, validated_data):
+        items_data = validated_data.pop(
+            "items",
+            None,
+        )
+
+        delivery_challans = validated_data.pop(
+            "delivery_challans",
+            None,
+        )
+
+        gst_type = validated_data.get(
+            "gst_type",
+            instance.gst_type,
+        )
+
+        additional_charges = validated_data.get(
+            "additional_charges",
+            instance.additional_charges,
+        )
+
+        # If items were supplied, rebuild the invoice items
+        # from the submitted data.
+        if items_data is not None:
+            prepared_items = []
+
+            for item in items_data:
+                paint = item["paint"]
+
+                item["description"] = (
+                    item.get("description")
+                    or paint.name
+                )
+
+                item["hsn_sac_code"] = paint.hsn_sac_code
+                item["gst_percentage"] = paint.gst_percentage
+
+                _, taxable_amount, gst_amount = (
+                    self._calculate_item(item)
+                )
+
+                item["line_total"] = (
+                    taxable_amount + gst_amount
+                ).quantize(Decimal("0.01"))
+
+                prepared_items.append(item)
+
+        # If items were not supplied, recalculate using
+        # the existing invoice items.
+        else:
+            prepared_items = []
+
+            for item in instance.items.all():
+                item_data = {
+                    "paint": item.paint,
+                    "description": item.description,
+                    "hsn_sac_code": item.hsn_sac_code,
+                    "batch_number": item.batch_number,
+                    "pack_description": item.pack_description,
+                    "quantity": item.quantity,
+                    "unit_price": item.unit_price,
+                    "gst_percentage": item.gst_percentage,
+                    "line_discount": item.line_discount,
+                }
+
+                _, taxable_amount, gst_amount = (
+                    self._calculate_item(item_data)
+                )
+
+                item_data["line_total"] = (
+                    taxable_amount + gst_amount
+                ).quantize(Decimal("0.01"))
+
+                prepared_items.append(item_data)
+
+        totals = self._calculate_totals(
+            prepared_items,
+            gst_type,
+            additional_charges,
+        )
+
+        validated_data.update(totals)
+
+        with transaction.atomic():
+            for field, value in validated_data.items():
+                setattr(instance, field, value)
+
+            instance.save()
+
+            if items_data is not None:
+                instance.items.all().delete()
+
+                InvoiceItem.objects.bulk_create(
+                    [
+                        InvoiceItem(
+                            invoice=instance,
+                            **item,
+                        )
+                        for item in prepared_items
+                    ]
+                )
+
+            if delivery_challans is not None:
+                instance.delivery_challans.set(
+                    delivery_challans
+                )
+
+        return instance
