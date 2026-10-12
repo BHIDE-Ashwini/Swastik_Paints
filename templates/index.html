@@ -1078,7 +1078,7 @@
 
                                 <div class="support-contact-field">
                                     <label for="support-first-name">
-                                        First name*
+                                        First name
                                     </label>
 
                                     <input type="text"
@@ -1092,7 +1092,7 @@
 
                                 <div class="support-contact-field">
                                     <label for="support-last-name">
-                                        Last name*
+                                        Last name
                                     </label>
 
                                     <input type="text"
@@ -1110,7 +1110,7 @@
                             <div class="support-contact-field">
 
                                 <label for="support-email">
-                                    Work email*
+                                    Work email
                                 </label>
 
                                 <input type="email"
@@ -1127,7 +1127,7 @@
                             <div class="support-contact-field">
 
                                 <label for="support-phone">
-                                    Phone number*
+                                    Phone number
                                 </label>
 
                                 <div class="support-contact-phone">
@@ -1143,11 +1143,20 @@
                                            id="support-phone"
                                            name="phone"
                                            placeholder="Enter phone number"
-                                           autocomplete="tel"
+                                           autocomplete="tel-national"
+                                           inputmode="numeric"
+                                           pattern="[0-9]{10}"
+                                           maxlength="10"
+                                           title="Please enter a valid 10-digit phone number."
+                                           aria-describedby="support-phone-error"
                                            required>
 
                                 </div>
-
+                                <small id="support-phone-error"
+                                       role="alert"
+                                       hidden>
+                                    Please enter a valid 10-digit phone number.
+                                </small>
                             </div>
 
 
@@ -1155,7 +1164,7 @@
                             <div class="support-contact-field">
 
                                 <label for="support-message">
-                                    Message*
+                                    Message
                                 </label>
 
                                 <textarea id="support-message"
@@ -1170,7 +1179,7 @@
                             <!-- Submit -->
                             <div class="support-contact-submit-row">
 
-                                <button type="button"
+                                <button type="submit"
                                         class="support-contact-submit">
                                     Submit
                                 </button>
