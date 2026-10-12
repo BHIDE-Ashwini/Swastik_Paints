@@ -1744,25 +1744,56 @@ section,
     }
 
 
+
+    /*--------------------------------------------------------------
+# Contact Support Section Title
+--------------------------------------------------------------*/
+
+    #support-contact .support-contact-section-title {
+        padding-bottom: 35px;
+    }
+
+        #support-contact .support-contact-section-title p {
+            max-width: 900px;
+            margin: 10px auto 0;
+            line-height: 1.2;
+        }
+
+/* Responsive heading */
+@media (max-width: 767px) {
+    #support-contact .support-contact-section-title {
+        padding-bottom: 30px;
+    }
+
+        #support-contact .support-contact-section-title p {
+            font-size: clamp(28px, 5.5vw, 38px);
+        }
+}
+
+
     /*--------------------------------------------------------------
 # Main Two-Column Layout
 --------------------------------------------------------------*/
 
-    #support-contact .support-contact-layout {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
-        column-gap: 64px;
-        align-items: center;
-    }
+
+#support-contact .support-contact-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+    column-gap: 64px;
+    align-items: stretch;
+}
 
 
     /*--------------------------------------------------------------
 # Left Contact Information
 --------------------------------------------------------------*/
 
-    #support-contact .support-contact-info {
-        min-width: 0;
-    }
+
+#support-contact .support-contact-info {
+    min-width: 0;
+    align-self: start;
+}
+
 
 
     #support-contact .support-contact-badge {
@@ -1919,21 +1950,27 @@ section,
 # Divider
 --------------------------------------------------------------*/
 
-    #support-contact .support-contact-divider {
-        width: 1px;
-        height: 82%;
-        justify-self: center;
-        background: #e5e7eb;
-    }
+
+#support-contact .support-contact-divider {
+    width: 1px;
+    height: auto;
+    align-self: stretch;
+    justify-self: center;
+    background: #e5e7eb;
+}
+
 
 
     /*--------------------------------------------------------------
 # Right Form Area
 --------------------------------------------------------------*/
 
-    #support-contact .support-contact-form-area {
-        min-width: 0;
-    }
+
+#support-contact .support-contact-form-area {
+    min-width: 0;
+    align-self: start;
+}
+
 
 
     #support-contact .support-contact-form-wrapper {
