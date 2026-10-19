@@ -298,4 +298,47 @@ function initWhyUsScroll() {
 
 window.addEventListener('load', initWhyUsScroll);
 
+
+    /**
+     * Contact form phone number validation
+     */
+    const supportForm = document.querySelector('.support-contact-form');
+    const supportPhone = document.querySelector('#support-phone');
+    const supportPhoneError = document.querySelector('#support-phone-error');
+
+    if (supportForm && supportPhone && supportPhoneError) {
+
+        function validateSupportPhone(showError = false) {
+            const isValid = /^[0-9]{10}$/.test(supportPhone.value);
+
+            supportPhone.setCustomValidity(
+                isValid
+                    ? ''
+                    : 'Please enter a valid 10-digit phone number.'
+            );
+
+            supportPhoneError.hidden = isValid || !showError;
+
+            return isValid;
+        }
+
+        // Allow digits only and limit the number to 10 digits.
+        supportPhone.addEventListener('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
+
+            validateSupportPhone(
+                !supportPhoneError.hidden
+            );
+        });
+
+        // Validate before submitting the form.
+        supportForm.addEventListener('submit', function (event) {
+            if (!validateSupportPhone(true)) {
+                event.preventDefault();
+                supportPhone.reportValidity();
+                supportPhone.focus();
+            }
+        });
+
+    }
 })();
